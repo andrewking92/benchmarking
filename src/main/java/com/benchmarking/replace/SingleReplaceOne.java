@@ -24,7 +24,7 @@ public class SingleReplaceOne {
                 .applyConnectionString(new ConnectionString(MONGODB_URI))
                 .serverApi(serverApi)
                 .build();
-        
+
         try (MongoClient mongoClient = MongoClients.create(settings)) {
             // Get the database and collection
             MongoCollection<Document> collection = mongoClient.getDatabase(DATABASE_NAME)

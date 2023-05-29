@@ -1,4 +1,4 @@
-package com.benchmarking;
+package com.benchmarking.insert;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -10,6 +10,8 @@ import org.bson.Document;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.ConnectionString;
 import com.mongodb.client.model.BulkWriteOptions;
+import com.mongodb.ServerApi;
+import com.mongodb.ServerApiVersion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +22,16 @@ public class BulkInsert {
     private static final String COLLECTION_NAME = "bulk";
 
     public static void main(String[] args) {
-        ConnectionString connString = new ConnectionString(MONGODB_URI);
+
+        ServerApi serverApi = ServerApi.builder()
+                .version(ServerApiVersion.V1)
+                .build();
 
         MongoClientSettings settings = MongoClientSettings.builder()
-            .applyConnectionString(connString)
-            .build();
+                .applyConnectionString(new ConnectionString(MONGODB_URI))
+                .serverApi(serverApi)
+                .applyToConnectionPoolSettings(builder -> builder.minSize(50))
+                .build();
 
         try (MongoClient mongoClient = MongoClients.create(settings)) {
 

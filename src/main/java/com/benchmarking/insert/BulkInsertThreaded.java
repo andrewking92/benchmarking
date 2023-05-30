@@ -1,6 +1,6 @@
 package com.benchmarking.insert;
 
-import org.bson.Document;
+import com.benchmarking.models.*;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -14,17 +14,24 @@ import com.mongodb.client.model.WriteModel;
 import com.mongodb.client.model.BulkWriteOptions;
 import com.mongodb.ServerApi;
 import com.mongodb.ServerApiVersion;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.PojoCodecProvider;
 import java.util.concurrent.TimeUnit;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
+import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
+
 public class BulkInsertThreaded {
     private static final int NUM_THREADS = 10;
     private static final int TOTAL_DOCUMENTS = 1000;
-    private static final String MONGODB_URI = "mongodb://localhost:27017";
+    private static final String MONGODB_URI = System.getProperty("mongodb.uri");
     private static final String DATABASE_NAME = "test";
     private static final String COLLECTION_NAME = "bulk";
+    private static final CodecRegistry pojoCodecRegistry = fromProviders(PojoCodecProvider.builder().automatic(true).build());
+    private static final CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), pojoCodecRegistry);
 
     public static void main(String[] args) {
         ServerApi serverApi = ServerApi.builder()
@@ -34,18 +41,29 @@ public class BulkInsertThreaded {
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(new ConnectionString(MONGODB_URI))
                 .serverApi(serverApi)
+                .codecRegistry(codecRegistry)
                 .build();
 
         try (MongoClient mongoClient = MongoClients.create(settings)) {
             // Get the database and collection
-            MongoCollection<Document> collection = mongoClient.getDatabase(DATABASE_NAME)
-                    .getCollection(COLLECTION_NAME);
+            MongoCollection<Account> collection = mongoClient.getDatabase(DATABASE_NAME)
+                    .getCollection(COLLECTION_NAME, Account.class);
 
-            List<WriteModel<Document>> requests = new ArrayList<>();
+            List<WriteModel<Account>> requests = new ArrayList<>();
+
+            Account account = new Account();
+            account.setName("John Doe");
+            account.setAccountKey("abcdef");
+
+            SpecificAccountUsage specificAccountUsage = new SpecificAccountUsage();
+            specificAccountUsage.setName("Specific Usage");
+            specificAccountUsage.setAddress("123 Main St");
+            specificAccountUsage.setSize(10);
+            account.setSpecificAccountUsage(specificAccountUsage);
 
             for (int i = 1; i <= TOTAL_DOCUMENTS; i++) {
-                Document document = new Document("key", "value" + i);
-                requests.add(new InsertOneModel<>(document));
+                // Document document = new Document("key", "value" + i);
+                requests.add(new InsertOneModel<>(account));
             }
 
             BulkWriteOptions bulkWriteOptions = new BulkWriteOptions().ordered(false);
@@ -67,7 +85,7 @@ public class BulkInsertThreaded {
                     endIndex = requests.size();
                 }
 
-                List<WriteModel<Document>> chunk = requests.subList(startIndex, endIndex);
+                List<WriteModel<Account>> chunk = requests.subList(startIndex, endIndex);
 
                 // Submit the task to the executor service
                 executorService.submit(new BulkInsertTask(collection, chunk, bulkWriteOptions));

@@ -1,18 +1,18 @@
 package com.benchmarking.insert;
 
+import com.benchmarking.models.*;
 import com.mongodb.bulk.BulkWriteResult;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.BulkWriteOptions;
 import com.mongodb.client.model.WriteModel;
-import org.bson.Document;
 import java.util.List;
 
 public class BulkInsertTask implements Runnable {
-    private final MongoCollection<Document> collection;
-    private final List<WriteModel<Document>> requests;
+    private final MongoCollection<Account> collection;
+    private final List<WriteModel<Account>> requests;
     private final BulkWriteOptions bulkWriteOptions;
 
-    public BulkInsertTask(MongoCollection<Document> collection, List<WriteModel<Document>> requests,
+    public BulkInsertTask(MongoCollection<Account> collection, List<WriteModel<Account>> requests,
                               BulkWriteOptions bulkWriteOptions) {
         this.collection = collection;
         this.requests = requests;

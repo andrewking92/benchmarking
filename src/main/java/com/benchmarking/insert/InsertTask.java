@@ -1,23 +1,30 @@
 package com.benchmarking.insert;
 
-import org.bson.Document;
+import com.benchmarking.models.*;
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoCollection;
 
 public class InsertTask implements Runnable {
-    private final MongoCollection<Document> collection;
-    private final int documentIndex;
+    private final MongoCollection<Account> collection;
 
-    public InsertTask(MongoCollection<Document> collection, int documentIndex) {
+    public InsertTask(MongoCollection<Account> collection) {
         this.collection = collection;
-        this.documentIndex = documentIndex;
     }
 
     @Override
     public void run() {
-        Document document = new Document("key", "value" + documentIndex);
+        Account account = new Account();
+        account.setName("John Doe");
+        account.setAccountKey("abcdef");
+
+        SpecificAccountUsage specificAccountUsage = new SpecificAccountUsage();
+        specificAccountUsage.setName("Specific Usage");
+        specificAccountUsage.setAddress("123 Main St");
+        specificAccountUsage.setSize(10);
+        account.setSpecificAccountUsage(specificAccountUsage);
+
         try {
-            collection.insertOne(document);
+            collection.insertOne(account);
         } catch (MongoWriteException e) {
             System.err.println("Error during insert: " + e.getMessage());
         }

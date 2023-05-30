@@ -51,15 +51,7 @@ public class BulkInsertThreaded {
 
             List<WriteModel<Account>> requests = new ArrayList<>();
 
-            Account account = new Account();
-            account.setName("John Doe");
-            account.setAccountKey("abcdef");
-
-            SpecificAccountUsage specificAccountUsage = new SpecificAccountUsage();
-            specificAccountUsage.setName("Specific Usage");
-            specificAccountUsage.setAddress("123 Main St");
-            specificAccountUsage.setSize(10);
-            account.setSpecificAccountUsage(specificAccountUsage);
+            Account account = new Account("John Doe", "abcdef", new SpecificAccountUsage("Specific Usage", "123 Main St", 10));
 
             for (int i = 1; i <= TOTAL_DOCUMENTS; i++) {
                 requests.add(new InsertOneModel<>(account));

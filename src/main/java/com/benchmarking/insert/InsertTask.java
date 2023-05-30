@@ -13,15 +13,7 @@ public class InsertTask implements Runnable {
 
     @Override
     public void run() {
-        Account account = new Account();
-        account.setName("John Doe");
-        account.setAccountKey("abcdef");
-
-        SpecificAccountUsage specificAccountUsage = new SpecificAccountUsage();
-        specificAccountUsage.setName("Specific Usage");
-        specificAccountUsage.setAddress("123 Main St");
-        specificAccountUsage.setSize(10);
-        account.setSpecificAccountUsage(specificAccountUsage);
+        Account account = new Account("John Doe", "abcdef", new SpecificAccountUsage("Specific Usage", "123 Main St", 10));
 
         try {
             collection.insertOne(account);

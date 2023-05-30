@@ -12,6 +12,14 @@ public class SpecificAccountUsage {
     @BsonProperty("size")
     private int size;
 
+    public SpecificAccountUsage() {}
+
+    public SpecificAccountUsage(String name, String address, int size) {
+        this.name = name;
+        this.address = address;
+        this.size = size;
+    }
+
     public String getName() {
         return name;
     }

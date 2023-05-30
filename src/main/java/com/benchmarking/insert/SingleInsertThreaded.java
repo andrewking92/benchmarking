@@ -34,30 +34,30 @@ public class SingleInsertThreaded {
             MongoCollection<Document> collection = mongoClient.getDatabase(DATABASE_NAME)
                     .getCollection(COLLECTION_NAME);
 
-          // Create a thread pool
-          ExecutorService executor = Executors.newFixedThreadPool(NUM_THREADS);
+            // Create a thread pool
+            ExecutorService executor = Executors.newFixedThreadPool(NUM_THREADS);
 
-          // Start timing
-          long startTime = System.currentTimeMillis();
+            // Start timing
+            long startTime = System.currentTimeMillis();
 
-          // Submit tasks to the thread pool
-          for (int i = 1; i <= TOTAL_DOCUMENTS; i++) {
-              int documentIndex = i;
-              executor.submit(new InsertTask(collection, documentIndex));
-          }
+            // Submit tasks to the thread pool
+            for (int i = 1; i <= TOTAL_DOCUMENTS; i++) {
+                int documentIndex = i;
+                executor.submit(new InsertTask(collection, documentIndex));
+            }
 
-          // Stop timing
-          long endTime = System.currentTimeMillis();
-          long duration = endTime - startTime;
+            // Stop timing
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
 
-          // Shutdown the thread pool and wait for all tasks to complete
-          executor.shutdown();
-          while (!executor.isTerminated()) {
-              // Wait for all tasks to complete
-          }
+            // Shutdown the thread pool and wait for all tasks to complete
+            executor.shutdown();
+            while (!executor.isTerminated()) {
+                // Wait for all tasks to complete
+            }
 
-          System.out.println("Concurrent insert completed. Total documents inserted: " + TOTAL_DOCUMENTS);
-          System.out.println("Execution time: " + duration + " milliseconds.");
+            System.out.println("Concurrent insert completed. Total documents inserted: " + TOTAL_DOCUMENTS);
+            System.out.println("Execution time: " + duration + " milliseconds.");
       }
   }
 }

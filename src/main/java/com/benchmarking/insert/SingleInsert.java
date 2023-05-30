@@ -7,7 +7,6 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.ConnectionString;
-import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.ServerApi;
 import com.mongodb.ServerApiVersion;
 
@@ -40,7 +39,7 @@ public class SingleInsert {
             for (int i = 1; i <= TOTAL_DOCUMENTS; i++) {
                 Document document = new Document("key", "value" + i);
                 try {
-                    InsertOneResult result = collection.insertOne(document);
+                    collection.insertOne(document);
                     count++;
 
                 } catch (MongoWriteException e) {

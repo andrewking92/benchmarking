@@ -46,15 +46,15 @@ public class SingleInsertThreaded {
                 executor.submit(new InsertTask(collection, documentIndex));
             }
 
-            // Stop timing
-            long endTime = System.currentTimeMillis();
-            long duration = endTime - startTime;
-
             // Shutdown the thread pool and wait for all tasks to complete
             executor.shutdown();
             while (!executor.isTerminated()) {
                 // Wait for all tasks to complete
             }
+
+            // Stop timing
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
 
             System.out.println("Concurrent insert completed. Total documents inserted: " + TOTAL_DOCUMENTS);
             System.out.println("Execution time: " + duration + " milliseconds.");

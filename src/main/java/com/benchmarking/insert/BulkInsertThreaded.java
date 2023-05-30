@@ -73,9 +73,6 @@ public class BulkInsertThreaded {
                 executorService.submit(new BulkInsertTask(collection, chunk, bulkWriteOptions));
             }
 
-            long endTime = System.currentTimeMillis();
-            long duration = endTime - startTime;
-
             // Shutdown the executor service and wait for all tasks to complete
             executorService.shutdown();
 
@@ -90,6 +87,9 @@ public class BulkInsertThreaded {
                 System.out.println("Interrupted while waiting for task completion: " + e.getMessage());
                 Thread.currentThread().interrupt();
             }
+
+            long endTime = System.currentTimeMillis();
+            long duration = endTime - startTime;
 
             System.out.println("Execution time: " + duration + " milliseconds.");
       }

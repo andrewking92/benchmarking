@@ -62,7 +62,6 @@ public class BulkInsertThreaded {
             account.setSpecificAccountUsage(specificAccountUsage);
 
             for (int i = 1; i <= TOTAL_DOCUMENTS; i++) {
-                // Document document = new Document("key", "value" + i);
                 requests.add(new InsertOneModel<>(account));
             }
 

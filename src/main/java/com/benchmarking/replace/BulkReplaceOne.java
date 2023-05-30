@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BulkReplaceOne {
+    private static final int TOTAL_DOCUMENTS = 1000;
     private static final String MONGODB_URI = "mongodb://localhost:27017";
     private static final String DATABASE_NAME = "test";
     private static final String COLLECTION_NAME = "bulk";

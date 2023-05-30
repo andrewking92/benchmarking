@@ -11,6 +11,7 @@ import com.mongodb.ServerApi;
 import com.mongodb.ServerApiVersion;
 
 public class SingleReplaceOne {
+    private static final int TOTAL_DOCUMENTS = 1000;
     private static final String MONGODB_URI = "mongodb://localhost:27017";
     private static final String DATABASE_NAME = "test";
     private static final String COLLECTION_NAME = "bulk";
@@ -35,7 +36,7 @@ public class SingleReplaceOne {
 
             // Insert individual documents
             int count = 0;
-            for (int i = 1; i <= 1000; i++) {
+            for (int i = 1; i <= TOTAL_DOCUMENTS; i++) {
                 Document document = new Document("key", "value" + i);
                 Document document2 = new Document("key", "value" + i).append("runtime",  i);
 

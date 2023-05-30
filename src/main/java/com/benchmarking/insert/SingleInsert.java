@@ -7,19 +7,25 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.ConnectionString;
-
+import com.mongodb.client.result.InsertOneResult;
+import com.mongodb.ServerApi;
+import com.mongodb.ServerApiVersion;
 
 public class SingleInsert {
+    private static final int TOTAL_DOCUMENTS = 1000;
     private static final String MONGODB_URI = "mongodb://localhost:27017";
     private static final String DATABASE_NAME = "test";
     private static final String COLLECTION_NAME = "bulk";
 
     public static void main(String[] args) {
-        ConnectionString connString = new ConnectionString(MONGODB_URI);
+        ServerApi serverApi = ServerApi.builder()
+                .version(ServerApiVersion.V1)
+                .build();
 
         MongoClientSettings settings = MongoClientSettings.builder()
-            .applyConnectionString(connString)
-            .build();
+                .applyConnectionString(new ConnectionString(MONGODB_URI))
+                .serverApi(serverApi)
+                .build();
 
         try (MongoClient mongoClient = MongoClients.create(settings)) {
             // Get the database and collection
@@ -31,11 +37,12 @@ public class SingleInsert {
 
             // Insert individual documents
             int count = 0;
-            for (int i = 1; i <= 1000; i++) {
+            for (int i = 1; i <= TOTAL_DOCUMENTS; i++) {
                 Document document = new Document("key", "value" + i);
                 try {
-                    collection.insertOne(document);
+                    InsertOneResult result = collection.insertOne(document);
                     count++;
+
                 } catch (MongoWriteException e) {
                     System.err.println("Error during individual insert: " + e.getMessage());
                 }

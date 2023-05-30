@@ -9,20 +9,25 @@ import com.mongodb.ConnectionString;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import com.mongodb.ServerApi;
+import com.mongodb.ServerApiVersion;
 
 public class SingleInsertThreaded {
-    private static final int NUM_THREADS = 40;
+    private static final int NUM_THREADS = 10;
     private static final int TOTAL_DOCUMENTS = 1000;
     private static final String MONGODB_URI = "mongodb://localhost:27017";
     private static final String DATABASE_NAME = "test";
     private static final String COLLECTION_NAME = "bulk";
 
     public static void main(String[] args) {
-        ConnectionString connString = new ConnectionString(MONGODB_URI);
+        ServerApi serverApi = ServerApi.builder()
+                .version(ServerApiVersion.V1)
+                .build();
 
         MongoClientSettings settings = MongoClientSettings.builder()
-            .applyConnectionString(connString)
-            .build();
+                .applyConnectionString(new ConnectionString(MONGODB_URI))
+                .serverApi(serverApi)
+                .build();
 
         try (MongoClient mongoClient = MongoClients.create(settings)) {
             // Get the database and collection
@@ -41,15 +46,15 @@ public class SingleInsertThreaded {
               executor.submit(new InsertTask(collection, documentIndex));
           }
 
+          // Stop timing
+          long endTime = System.currentTimeMillis();
+          long duration = endTime - startTime;
+
           // Shutdown the thread pool and wait for all tasks to complete
           executor.shutdown();
           while (!executor.isTerminated()) {
               // Wait for all tasks to complete
           }
-
-          // Stop timing
-          long endTime = System.currentTimeMillis();
-          long duration = endTime - startTime;
 
           System.out.println("Concurrent insert completed. Total documents inserted: " + TOTAL_DOCUMENTS);
           System.out.println("Execution time: " + duration + " milliseconds.");

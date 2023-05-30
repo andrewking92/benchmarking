@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BulkInsert {
+    private static final int TOTAL_DOCUMENTS = 1000;
     private static final String MONGODB_URI = "mongodb://localhost:27017";
     private static final String DATABASE_NAME = "test";
     private static final String COLLECTION_NAME = "bulk";
@@ -30,7 +31,7 @@ public class BulkInsert {
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(new ConnectionString(MONGODB_URI))
                 .serverApi(serverApi)
-                .applyToConnectionPoolSettings(builder -> builder.minSize(50))
+                .applyToConnectionPoolSettings(builder -> builder.minSize(1))
                 .build();
 
         try (MongoClient mongoClient = MongoClients.create(settings)) {
@@ -46,13 +47,15 @@ public class BulkInsert {
             List<WriteModel<Document>> requests = new ArrayList<>();
 
             // Add insert operations to the list
-            for (int i = 1; i <= 1000; i++) {
+            for (int i = 1; i <= TOTAL_DOCUMENTS; i++) {
                 Document document = new Document("key", "value" + i);
                 requests.add(new InsertOneModel<>(document));
             }
 
+            BulkWriteOptions bulkWriteOptions = new BulkWriteOptions().ordered(false);
+ 
             // Perform bulk write
-            BulkWriteResult result = collection.bulkWrite(requests, new BulkWriteOptions().ordered(false));
+            BulkWriteResult result = collection.bulkWrite(requests, bulkWriteOptions);
 
             // Stop timing
             long endTime = System.currentTimeMillis();

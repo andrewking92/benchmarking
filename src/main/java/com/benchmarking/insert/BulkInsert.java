@@ -24,8 +24,8 @@ import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 public class BulkInsert {
     private static final int TOTAL_DOCUMENTS = 1000;
     private static final String MONGODB_URI = System.getProperty("mongodb.uri");
-    private static final String DATABASE_NAME = "test";
-    private static final String COLLECTION_NAME = "bulk";
+    private static final String DATABASE_NAME = System.getProperty("mongodb.database");
+    private static final String COLLECTION_NAME = System.getProperty("mongodb.collection");
     private static final CodecRegistry pojoCodecRegistry = fromProviders(PojoCodecProvider.builder().automatic(true).build());
     private static final CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), pojoCodecRegistry);
 

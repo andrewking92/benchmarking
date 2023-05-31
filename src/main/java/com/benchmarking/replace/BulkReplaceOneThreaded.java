@@ -55,39 +55,39 @@ public class BulkReplaceOneThreaded {
 
                     Bson filter = Filters.eq("name", "John Doe");
                     Account account = new Account("Dohn Joe", "abcdef", new SpecificAccountUsage("Specific Usage", "123 Main St", 10));
-            
+
                     for (int i = 1; i <= TOTAL_DOCUMENTS; i++) {
                         requests.add(new ReplaceOneModel<>(filter, account));
                     }
-        
+
                     BulkWriteOptions bulkWriteOptions = new BulkWriteOptions().ordered(false);
-        
+
                     // Create a thread pool with the specified number of threads
                     ExecutorService executorService = Executors.newFixedThreadPool(NUM_THREADS);
-        
+
                     // Start timing
                     long startTime = System.currentTimeMillis();
-        
+
                     // Calculate the chunk size per thread
                     int chunkSize = requests.size() / NUM_THREADS;
-        
+
                     for (int i = 0; i < NUM_THREADS; i++) {
                         int startIndex = i * chunkSize;
                         int endIndex = (i + 1) * chunkSize;
-        
+
                         if (i == NUM_THREADS - 1) {
                             endIndex = requests.size();
                         }
-        
+
                         List<WriteModel<Account>> chunk = requests.subList(startIndex, endIndex);
-        
+
                         // Submit the task to the executor service
                         executorService.submit(new BulkReplaceOneTask(collection, chunk, bulkWriteOptions));
                     }
-        
+
                     // Shutdown the executor service and wait for all tasks to complete
                     executorService.shutdown();
-        
+
                     try {
                         // Wait for all tasks to complete or timeout after a specific duration
                         if (!executorService.awaitTermination(10, TimeUnit.SECONDS)) {
@@ -99,7 +99,7 @@ public class BulkReplaceOneThreaded {
                         System.out.println("Interrupted while waiting for task completion: " + e.getMessage());
                         Thread.currentThread().interrupt();
                     }
-        
+
                     long endTime = System.currentTimeMillis();
                     long duration = endTime - startTime;
 

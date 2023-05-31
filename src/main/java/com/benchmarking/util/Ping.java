@@ -11,8 +11,9 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
 public class Ping {
-    private static final String MONGODB_URI = "mongodb://localhost:27017";
-    private static final String DATABASE_NAME = "test";
+    private static final int TOTAL_ITER = Integer.parseInt(System.getProperty("mongodb.count"));
+    private static final String MONGODB_URI = System.getProperty("mongodb.uri");
+    private static final String DATABASE_NAME = System.getProperty("mongodb.database");
 
     public static void main(String[] args) {
 
@@ -34,14 +35,18 @@ public class Ping {
                 // Start timing
                 long startTime = System.currentTimeMillis();
 
-                database.runCommand(new Document("ping", 1));
+                for (int i = 1; i <= TOTAL_ITER; i++) {
+                    database.runCommand(new Document("ping", 1));
+                }
 
                 // Stop timing
                 long endTime = System.currentTimeMillis();
                 long duration = endTime - startTime;
 
-                System.out.println("Pinged your deployment. You successfully connected to MongoDB!");
-                System.out.println("Execution time: " + duration + " milliseconds.");
+                double averageDuration = (double) duration / TOTAL_ITER;
+
+                System.out.println("Pinged deployment " + TOTAL_ITER + " times.");
+                System.out.println("Average execution time: " + averageDuration + " milliseconds.");
 
             } catch (MongoException e) {
                 e.printStackTrace();

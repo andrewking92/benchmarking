@@ -17,8 +17,8 @@ import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 public class SingleReplaceOneThreaded {
-    private static final int NUM_THREADS = 10;
-    private static final int TOTAL_DOCUMENTS = 1000;
+    private static final int NUM_THREADS = Integer.parseInt(System.getProperty("mongodb.threads"));
+    private static final int TOTAL_DOCUMENTS = Integer.parseInt(System.getProperty("mongodb.documents"));
     private static final String MONGODB_URI = System.getProperty("mongodb.uri");
     private static final String DATABASE_NAME = System.getProperty("mongodb.database");
     private static final String COLLECTION_NAME = System.getProperty("mongodb.collection");

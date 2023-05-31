@@ -101,6 +101,6 @@ public class BulkInsertThreaded {
             long duration = endTime - startTime;
 
             System.out.println("Execution time: " + duration + " milliseconds.");
-      }
-  }
+        }
+    }
 }

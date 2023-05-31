@@ -35,7 +35,7 @@ public class Ping {
                 long totalDuration = 0;
 
                 for (int i = 0; i < TOTAL_ITER; i++) {
-                    long startTime = System.nanoTime();
+                    long startTime = System.currentTimeMillis();
     
                     // Build the ping command
                     Document command = new Document("ping", 1);
@@ -43,14 +43,15 @@ public class Ping {
                     // Execute the ping command
                     database.runCommand(command);
     
-                    long endTime = System.nanoTime();
+                    long endTime = System.currentTimeMillis();
                     long duration = endTime - startTime;
                     totalDuration += duration;
                 }
     
-                double averageResponseTime = (double) totalDuration / TOTAL_ITER / 1_000_000; // Convert nanoseconds to milliseconds
+                double averageResponseTime = (double) totalDuration / TOTAL_ITER;
 
                 System.out.println("Pinged deployment " + TOTAL_ITER + " times.");
+                System.out.println("Execution time: " + totalDuration + " milliseconds.");
                 System.out.println("Average response time per ping command: " + averageResponseTime + " milliseconds");
 
             } catch (MongoException e) {

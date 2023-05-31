@@ -32,21 +32,26 @@ public class Ping {
                 // Send a ping to confirm a successful connection
                 MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
 
-                // Start timing
-                long startTime = System.currentTimeMillis();
+                long totalDuration = 0;
 
-                for (int i = 1; i <= TOTAL_ITER; i++) {
-                    database.runCommand(new Document("ping", 1));
+                for (int i = 0; i < TOTAL_ITER; i++) {
+                    long startTime = System.nanoTime();
+    
+                    // Build the ping command
+                    Document command = new Document("ping", 1);
+    
+                    // Execute the ping command
+                    database.runCommand(command);
+    
+                    long endTime = System.nanoTime();
+                    long duration = endTime - startTime;
+                    totalDuration += duration;
                 }
-
-                // Stop timing
-                long endTime = System.currentTimeMillis();
-                long duration = endTime - startTime;
-
-                double averageDuration = (double) duration / TOTAL_ITER;
+    
+                double averageResponseTime = (double) totalDuration / TOTAL_ITER / 1_000_000; // Convert nanoseconds to milliseconds
 
                 System.out.println("Pinged deployment " + TOTAL_ITER + " times.");
-                System.out.println("Average execution time: " + averageDuration + " milliseconds.");
+                System.out.println("Average response time per ping command: " + averageResponseTime + " milliseconds");
 
             } catch (MongoException e) {
                 e.printStackTrace();

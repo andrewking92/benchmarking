@@ -63,7 +63,7 @@ public class SingleReplaceOneThreaded {
             long endTime = System.currentTimeMillis();
             long duration = endTime - startTime;
 
-            System.out.println("Replaced documents: " + TOTAL_DOCUMENTS);
+            System.out.println("MOdified documents: " + TOTAL_DOCUMENTS);
 
             System.out.println("Execution time: " + duration + " milliseconds.");
         }

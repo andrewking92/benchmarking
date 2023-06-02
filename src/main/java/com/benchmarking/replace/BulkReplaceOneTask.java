@@ -22,6 +22,6 @@ public class BulkReplaceOneTask implements Runnable {
     @Override
     public void run() {
         BulkWriteResult result = collection.bulkWrite(requests, bulkWriteOptions);
-        System.out.println("Inserted documents: " + result.getModifiedCount());
+        System.out.println("Modified documents: " + result.getModifiedCount());
     }
 }

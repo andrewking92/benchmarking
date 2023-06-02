@@ -2,7 +2,7 @@ package com.benchmarking.models;
 
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
-public class SpecificAccountUsage {
+public class EmbeddedDocument {
     @BsonProperty("name")
     private String name;
 
@@ -12,9 +12,14 @@ public class SpecificAccountUsage {
     @BsonProperty("size")
     private int size;
 
-    public SpecificAccountUsage() {}
+    public EmbeddedDocument() {
+        // Test record
+        this.name = "Specific Usage";
+        this.address = "123 Main St";
+        this.size = 50;
+    }
 
-    public SpecificAccountUsage(String name, String address, int size) {
+    public EmbeddedDocument(String name, String address, int size) {
         this.name = name;
         this.address = address;
         this.size = size;

@@ -17,7 +17,7 @@ public class ReplaceOneTask implements Runnable {
     public void run() {
 
         Bson filter = Filters.eq("name", "John Doe");
-        Account account = new Account("Dohn Joe", "abcdef", new SpecificAccountUsage("Specific Usage", "123 Main St", 10));
+        Account account = new Account("Dohn Joe");
 
         try {
             collection.replaceOne(filter, account);

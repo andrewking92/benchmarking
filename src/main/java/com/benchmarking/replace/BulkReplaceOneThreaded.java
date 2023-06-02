@@ -54,7 +54,7 @@ public class BulkReplaceOneThreaded {
                     List<WriteModel<Account>> requests = new ArrayList<>();
 
                     Bson filter = Filters.eq("name", "John Doe");
-                    Account account = new Account("Dohn Joe", "abcdef", new SpecificAccountUsage("Specific Usage", "123 Main St", 10));
+                    Account account = new Account("Dohn Joe");
 
                     for (int i = 1; i <= TOTAL_DOCUMENTS; i++) {
                         requests.add(new ReplaceOneModel<>(filter, account));

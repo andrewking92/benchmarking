@@ -49,7 +49,7 @@ public class SingleReplaceOne {
             int count = 0;
             for (int i = 1; i <= TOTAL_DOCUMENTS; i++) {
                 Bson filter = Filters.eq("name", "John Doe");
-                Account account = new Account("Dohn Joe", "abcdef", new SpecificAccountUsage("Specific Usage", "123 Main St", 10));
+                Account account = new Account("Dohn Joe");
 
                 try {
                     UpdateResult result = collection.replaceOne(filter, account);
@@ -62,7 +62,7 @@ public class SingleReplaceOne {
             long endTime = System.currentTimeMillis();
             long duration = endTime - startTime;
 
-            System.out.println("Replaced documents: " + count);
+            System.out.println("Modified documents: " + count);
 
             System.out.println("Execution time: " + duration + " milliseconds.");
         }

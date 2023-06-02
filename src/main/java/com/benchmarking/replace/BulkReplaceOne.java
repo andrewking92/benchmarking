@@ -57,7 +57,7 @@ public class BulkReplaceOne {
             for (int i = 1; i <= TOTAL_DOCUMENTS; i++) {
 
                 Bson filter = Filters.eq("name", "John Doe");
-                Account account = new Account("Dohn Joe", "abcdef", new SpecificAccountUsage("Specific Usage", "123 Main St", 10));
+                Account account = new Account("Dohn Joe");
 
                 requests.add(new ReplaceOneModel<>(filter, account));
             }
@@ -70,7 +70,7 @@ public class BulkReplaceOne {
             long duration = endTime - startTime;
 
             // Print the result
-            System.out.println("Replaced documents: " + result.getModifiedCount());
+            System.out.println("Modified documents: " + result.getModifiedCount());
 
             System.out.println("Execution time: " + duration + " milliseconds.");
         }

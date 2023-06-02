@@ -12,20 +12,33 @@ public class Account {
     @BsonProperty("accountKey")
     private String accountKey;
 
-    @BsonProperty("specificAccountUsage")
-    private SpecificAccountUsage specificAccountUsage;
+    @BsonProperty("embeddedDocument1")
+    private EmbeddedDocument embeddedDocument1;
+
+    @BsonProperty("embeddedDocument2")
+    private EmbeddedDocument embeddedDocument2;
 
     public Account() {
         // Test record
         this.name = "John Doe";
         this.accountKey = "abcdef";
-        this.specificAccountUsage = new SpecificAccountUsage("Specific Usage", "123 Main St", 10);
+        this.embeddedDocument1 = new EmbeddedDocument();
+        this.embeddedDocument2 = new EmbeddedDocument();
     }
 
-    public Account(String name, String accountKey, SpecificAccountUsage specificAccountUsage) {
+    public Account(String name) {
+        // Test record
+        this.name = name;
+        this.accountKey = "abcdef";
+        this.embeddedDocument1 = new EmbeddedDocument();
+        this.embeddedDocument2 = new EmbeddedDocument();
+    }
+
+    public Account(String name, String accountKey, EmbeddedDocument embeddedDocument1, EmbeddedDocument embeddedDocument2) {
         this.name = name;
         this.accountKey = accountKey;
-        this.specificAccountUsage = specificAccountUsage;
+        this.embeddedDocument1 = embeddedDocument1;
+        this.embeddedDocument2 = embeddedDocument2;
     }
 
     public String getId() {
@@ -52,11 +65,19 @@ public class Account {
         this.accountKey = accountKey;
     }
 
-    public SpecificAccountUsage getSpecificAccountUsage() {
-        return specificAccountUsage;
+    public EmbeddedDocument getEmbeddedDocument1() {
+        return embeddedDocument1;
     }
 
-    public void setSpecificAccountUsage(SpecificAccountUsage specificAccountUsage) {
-        this.specificAccountUsage = specificAccountUsage;
+    public void setEmbeddedDocument1(EmbeddedDocument embeddedDocument1) {
+        this.embeddedDocument1 = embeddedDocument1;
+    }
+
+    public EmbeddedDocument getEmbeddedDocument2() {
+        return embeddedDocument2;
+    }
+
+    public void setEmbeddedDocument2(EmbeddedDocument embeddedDocument2) {
+        this.embeddedDocument2 = embeddedDocument2;
     }
 }

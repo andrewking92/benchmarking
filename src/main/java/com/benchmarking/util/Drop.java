@@ -13,9 +13,9 @@ import org.bson.Document;
 public class Drop {
     private static final String MONGODB_URI = System.getProperty("mongodb.uri");
     private static final String DATABASE_NAME = System.getProperty("mongodb.database");
-    private static final String COLLECTION_NAME = System.getProperty("mongodb.collection");
 
     public static void main(String[] args) {
+        String COLLECTION_NAME = args[2];
 
         ServerApi serverApi = ServerApi.builder()
                 .version(ServerApiVersion.V1)

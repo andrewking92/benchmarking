@@ -11,11 +11,11 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
 public class Ping {
-    private static final int TOTAL_ITER = Integer.parseInt(System.getProperty("mongodb.count"));
     private static final String MONGODB_URI = System.getProperty("mongodb.uri");
     private static final String DATABASE_NAME = System.getProperty("mongodb.database");
 
     public static void main(String[] args) {
+        int TOTAL_ITER = Integer.parseInt(args[2]);
 
         ServerApi serverApi = ServerApi.builder()
                 .version(ServerApiVersion.V1)

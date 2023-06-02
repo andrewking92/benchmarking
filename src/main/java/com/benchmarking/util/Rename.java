@@ -12,12 +12,12 @@ import org.bson.Document;
 
 public class Rename {
     private static final String MONGODB_URI = System.getProperty("mongodb.uri");
-    private static final String ADMIN_DATABASE_NAME = "admin";
     private static final String DATABASE_NAME = System.getProperty("mongodb.database");
-    private static final String COLLECTION_NAME = System.getProperty("mongodb.collection");
-    private static final String COLLECTION_NAME_TO = System.getProperty("mongodb.collection.to");
 
     public static void main(String[] args) {
+        String ADMIN_DATABASE_NAME = "admin";
+        String SRC_COLLECTION = args[2];
+        String DST_COLLECTION = args[3];
 
         ServerApi serverApi = ServerApi.builder()
                 .version(ServerApiVersion.V1)
@@ -38,8 +38,8 @@ public class Rename {
                 long startTime = System.currentTimeMillis();
 
                 // Build the ping command
-                Document command = new Document("renameCollection", DATABASE_NAME + "." + COLLECTION_NAME)
-                        .append("to", DATABASE_NAME + "." + COLLECTION_NAME_TO);
+                Document command = new Document("renameCollection", DATABASE_NAME + "." + SRC_COLLECTION)
+                        .append("to", DATABASE_NAME + "." + DST_COLLECTION);
 
                 // Execute the ping command
                 database.runCommand(command);
@@ -48,7 +48,7 @@ public class Rename {
                 long endTime = System.currentTimeMillis();
                 long duration = endTime - startTime;
 
-                System.out.println("Renamed collection: " + COLLECTION_NAME);
+                System.out.println("Renamed collection: " + SRC_COLLECTION + " to " + DST_COLLECTION);
                 System.out.println("Execution time: " + duration + " milliseconds.");
 
             } catch (MongoException e) {

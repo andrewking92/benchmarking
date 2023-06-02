@@ -48,7 +48,7 @@ public class Rename {
                 long endTime = System.currentTimeMillis();
                 long duration = endTime - startTime;
 
-                System.out.println("Dropped collection: " + COLLECTION_NAME);
+                System.out.println("Renamed collection: " + COLLECTION_NAME);
                 System.out.println("Execution time: " + duration + " milliseconds.");
 
             } catch (MongoException e) {

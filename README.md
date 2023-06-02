@@ -1,5 +1,10 @@
 # benchmarking
 
+# JAR
+
+mvn clean package
+
+
 # UTIL
 
 java -Dmongodb.uri="mongodb://localhost:27017" -Dmongodb.database="test" -jar target/benchmarking-1.0-SNAPSHOT-jar-with-dependencies.jar util ping 1000

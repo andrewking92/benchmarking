@@ -48,7 +48,7 @@ public class BulkInsert {
             MongoCollection<Account> collection = mongoClient.getDatabase(DATABASE_NAME)
                     .getCollection(COLLECTION_NAME, Account.class);
 
-            Account account = new Account("John Doe", "abcdef", new SpecificAccountUsage("Specific Usage", "123 Main St", 10));
+            Account account = new Account();
 
             // Start timing
             long startTime = System.currentTimeMillis();
@@ -58,7 +58,6 @@ public class BulkInsert {
 
             // Add insert operations to the list
             for (int i = 1; i <= TOTAL_DOCUMENTS; i++) {
-                // Document document = new Document("key", "value" + i);
                 requests.add(new InsertOneModel<>(account));
             }
 

@@ -15,7 +15,12 @@ public class Account {
     @BsonProperty("specificAccountUsage")
     private SpecificAccountUsage specificAccountUsage;
 
-    public Account() {}
+    public Account() {
+        // Test record
+        this.name = "John Doe";
+        this.accountKey = "abcdef";
+        this.specificAccountUsage = new SpecificAccountUsage("Specific Usage", "123 Main St", 10);
+    }
 
     public Account(String name, String accountKey, SpecificAccountUsage specificAccountUsage) {
         this.name = name;

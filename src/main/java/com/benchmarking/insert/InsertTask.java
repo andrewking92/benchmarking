@@ -13,7 +13,7 @@ public class InsertTask implements Runnable {
 
     @Override
     public void run() {
-        Account account = new Account("John Doe", "abcdef", new SpecificAccountUsage("Specific Usage", "123 Main St", 10));
+        Account account = new Account();
 
         try {
             collection.insertOne(account);

@@ -51,7 +51,7 @@ public class BulkInsertThreaded {
 
             List<WriteModel<Account>> requests = new ArrayList<>();
 
-            Account account = new Account("John Doe", "abcdef", new SpecificAccountUsage("Specific Usage", "123 Main St", 10));
+            Account account = new Account();
 
             for (int i = 1; i <= TOTAL_DOCUMENTS; i++) {
                 requests.add(new InsertOneModel<>(account));

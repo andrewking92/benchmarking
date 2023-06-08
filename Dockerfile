@@ -11,9 +11,6 @@ COPY pom.xml .
 COPY src ./src
 
 # Build the application with Maven, including the specified build arguments
-# ARG MONGODB_URI
-# ARG MONGODB_DATABASE
-# ARG MONGODB_COLLECTION
 RUN mvn clean package
 
 # Create a new stage with a minimal base image

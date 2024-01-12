@@ -56,7 +56,6 @@ public class BulkReplaceOneThreaded {
                     List<ObjectId> objectIds = getObjectIds(collection);
                     List<WriteModel<Account>> requests = new ArrayList<>();
 
-                    // Bson filter = Filters.eq("name", "John Doe");
                     Account account = new Account("New Name");
 
                     for (ObjectId id : objectIds) {

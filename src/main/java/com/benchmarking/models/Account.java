@@ -1,10 +1,11 @@
 package com.benchmarking.models;
 
 import org.bson.codecs.pojo.annotations.BsonProperty;
+import org.bson.types.ObjectId;
 
 public class Account {
     @BsonProperty("_id")
-    private String id;
+    private ObjectId id;
 
     @BsonProperty("name")
     private String name;
@@ -41,11 +42,11 @@ public class Account {
         this.embeddedDocument2 = embeddedDocument2;
     }
 
-    public String getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 

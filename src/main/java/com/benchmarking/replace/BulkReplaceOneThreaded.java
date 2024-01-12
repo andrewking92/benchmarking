@@ -4,6 +4,7 @@ import com.benchmarking.models.*;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.ReplaceOneModel;
 import com.mongodb.client.model.WriteModel;
 import com.mongodb.MongoClientSettings;
@@ -17,6 +18,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
+
 import com.mongodb.client.model.Filters;
 
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
@@ -27,7 +30,6 @@ import java.util.List;
 
 public class BulkReplaceOneThreaded {
     private static final int NUM_THREADS = Integer.parseInt(System.getProperty("mongodb.threads"));
-    private static final int TOTAL_DOCUMENTS = Integer.parseInt(System.getProperty("mongodb.documents"));
     private static final String MONGODB_URI = System.getProperty("mongodb.uri");
     private static final String DATABASE_NAME = System.getProperty("mongodb.database");
     private static final String COLLECTION_NAME = System.getProperty("mongodb.collection");
@@ -51,12 +53,15 @@ public class BulkReplaceOneThreaded {
             MongoCollection<Account> collection = mongoClient.getDatabase(DATABASE_NAME)
                     .getCollection(COLLECTION_NAME, Account.class);
 
+                    List<ObjectId> objectIds = getObjectIds(collection);
                     List<WriteModel<Account>> requests = new ArrayList<>();
 
-                    Bson filter = Filters.eq("name", "John Doe");
-                    Account account = new Account("Dohn Joe");
+                    // Bson filter = Filters.eq("name", "John Doe");
+                    Account account = new Account("New Name");
 
-                    for (int i = 1; i <= TOTAL_DOCUMENTS; i++) {
+                    for (ObjectId id : objectIds) {
+                        Bson filter = Filters.eq("_id", id);
+
                         requests.add(new ReplaceOneModel<>(filter, account));
                     }
 
@@ -106,5 +111,16 @@ public class BulkReplaceOneThreaded {
             // Print the result
             System.out.println("Execution time: " + duration + " milliseconds.");
         }
+    }
+
+    public static List<ObjectId> getObjectIds(MongoCollection<Account> collection) {
+        List<ObjectId> ids = new ArrayList<>();
+        try (MongoCursor<Account> cursor = collection.find().iterator()) {
+            while (cursor.hasNext()) {
+                Account doc = cursor.next();
+                ids.add(doc.getId());
+            }
+        }
+        return ids;
     }
 }

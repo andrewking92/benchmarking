@@ -4,8 +4,11 @@ import org.bson.codecs.pojo.annotations.BsonProperty;
 import org.bson.types.ObjectId;
 
 public class Account {
+    // @BsonProperty("_id")
+    // private ObjectId id;
+
     @BsonProperty("_id")
-    private ObjectId id;
+    private int id;
 
     @BsonProperty("name")
     private String name;
@@ -31,9 +34,9 @@ public class Account {
         // this.arrayField = new String[25];
     }
 
-    public Account(String name) {
+    public Account(int id, String name) {
         // Test record
-        this.id = new ObjectId();
+        this.id = id;
         this.name = name;
         this.accountKey = "abcdef";
         this.embeddedDocument1 = new EmbeddedDocument();
@@ -49,11 +52,19 @@ public class Account {
         // this.arrayField = arrayField;
     }
 
-    public ObjectId getId() {
+    // public ObjectId getId() {
+    //     return id;
+    // }
+
+    // public void setId(ObjectId id) {
+    //     this.id = id;
+    // }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(ObjectId id) {
+    public void setId(int id) {
         this.id = id;
     }
 

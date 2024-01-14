@@ -49,7 +49,7 @@ public class SingleReplaceOne {
             int count = 0;
             for (int i = 1; i <= TOTAL_DOCUMENTS; i++) {
                 Bson filter = Filters.eq("name", "John Doe");
-                Account account = new Account("Dohn Joe");
+                Account account = new Account(i, "Dohn Joe");
 
                 try {
                     UpdateResult result = collection.replaceOne(filter, account);

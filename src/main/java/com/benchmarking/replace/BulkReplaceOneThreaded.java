@@ -70,7 +70,7 @@ public class BulkReplaceOneThreaded {
 
                     for (int i = 1; i <= TOTAL_DOCUMENTS; i++) {
                         Bson filter = Filters.eq("_id", i);
-                        Account account = new Account(i, "Replaced Name");
+                        Account account = new Account(i, "Replace");
                         ReplaceOptions opts = new ReplaceOptions().upsert(true);
 
                         requests.add(new ReplaceOneModel<>(filter, account, opts));

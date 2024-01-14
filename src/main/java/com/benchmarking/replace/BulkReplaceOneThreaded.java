@@ -6,6 +6,8 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.ReplaceOneModel;
+import com.mongodb.client.model.ReplaceOptions;
+import com.mongodb.client.model.UpdateOneModel;
 import com.mongodb.client.model.WriteModel;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.ConnectionString;
@@ -30,6 +32,7 @@ import java.util.List;
 
 public class BulkReplaceOneThreaded {
     private static final int NUM_THREADS = Integer.parseInt(System.getProperty("mongodb.threads"));
+    private static final int TOTAL_DOCUMENTS = Integer.parseInt(System.getProperty("mongodb.documents"));
     private static final String MONGODB_URI = System.getProperty("mongodb.uri");
     private static final String DATABASE_NAME = System.getProperty("mongodb.database");
     private static final String COLLECTION_NAME = System.getProperty("mongodb.collection");
@@ -53,15 +56,23 @@ public class BulkReplaceOneThreaded {
             MongoCollection<Account> collection = mongoClient.getDatabase(DATABASE_NAME)
                     .getCollection(COLLECTION_NAME, Account.class);
 
-                    List<ObjectId> objectIds = getObjectIds(collection);
                     List<WriteModel<Account>> requests = new ArrayList<>();
 
-                    Account account = new Account("New Name");
+                    // List<ObjectId> objectIds = getObjectIds(collection);
 
-                    for (ObjectId id : objectIds) {
-                        Bson filter = Filters.eq("_id", id);
+                    // Account account = new Account("New Name");
 
-                        requests.add(new ReplaceOneModel<>(filter, account));
+                    // for (ObjectId id : objectIds) {
+                    //     Bson filter = Filters.eq("_id", id);
+
+                    //     requests.add(new ReplaceOneModel<>(filter, account, new ReplaceOptions().upsert(true)));
+                    // }
+
+                    for (int i = 1; i <= TOTAL_DOCUMENTS; i++) {
+                        Account account = new Account("Replaced Name");
+                        Bson filter = Filters.eq("_id", account.getId());
+
+                        requests.add(new ReplaceOneModel<>(filter, account, new ReplaceOptions().upsert(true)));
                     }
 
                     BulkWriteOptions bulkWriteOptions = new BulkWriteOptions().ordered(false);
@@ -70,7 +81,7 @@ public class BulkReplaceOneThreaded {
                     ExecutorService executorService = Executors.newFixedThreadPool(NUM_THREADS);
 
                     // Start timing
-                    long startTime = System.currentTimeMillis();
+                    // long startTime = System.currentTimeMillis();
 
                     // Calculate the chunk size per thread
                     int chunkSize = requests.size() / NUM_THREADS;
@@ -104,22 +115,22 @@ public class BulkReplaceOneThreaded {
                         Thread.currentThread().interrupt();
                     }
 
-                    long endTime = System.currentTimeMillis();
-                    long duration = endTime - startTime;
+                    // long endTime = System.currentTimeMillis();
+                    // long duration = endTime - startTime;
 
             // Print the result
-            System.out.println("Execution time: " + duration + " milliseconds.");
+            // System.out.println("Execution time: " + duration + " milliseconds.");
         }
     }
 
-    public static List<ObjectId> getObjectIds(MongoCollection<Account> collection) {
-        List<ObjectId> ids = new ArrayList<>();
-        try (MongoCursor<Account> cursor = collection.find().iterator()) {
-            while (cursor.hasNext()) {
-                Account doc = cursor.next();
-                ids.add(doc.getId());
-            }
-        }
-        return ids;
-    }
+    // public static List<ObjectId> getObjectIds(MongoCollection<Account> collection) {
+    //     List<ObjectId> ids = new ArrayList<>();
+    //     try (MongoCursor<Account> cursor = collection.find().iterator()) {
+    //         while (cursor.hasNext()) {
+    //             Account doc = cursor.next();
+    //             ids.add(doc.getId());
+    //         }
+    //     }
+    //     return ids;
+    // }
 }

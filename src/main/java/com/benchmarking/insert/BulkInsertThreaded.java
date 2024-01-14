@@ -63,7 +63,7 @@ public class BulkInsertThreaded {
             ExecutorService executorService = Executors.newFixedThreadPool(NUM_THREADS);
 
             // Start timing
-            long startTime = System.currentTimeMillis();
+            // long startTime = System.currentTimeMillis();
 
             // Calculate the chunk size per thread
             int chunkSize = requests.size() / NUM_THREADS;
@@ -97,10 +97,10 @@ public class BulkInsertThreaded {
                 Thread.currentThread().interrupt();
             }
 
-            long endTime = System.currentTimeMillis();
-            long duration = endTime - startTime;
+            // long endTime = System.currentTimeMillis();
+            // long duration = endTime - startTime;
 
-            System.out.println("Execution time: " + duration + " milliseconds.");
+            // System.out.println("Execution time: " + duration + " milliseconds.");
         }
     }
 }

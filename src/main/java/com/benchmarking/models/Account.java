@@ -19,12 +19,16 @@ public class Account {
     @BsonProperty("embeddedDocument2")
     private EmbeddedDocument embeddedDocument2;
 
+    @BsonProperty("arrayField")
+    private String[] arrayField;
+
     public Account() {
         // Test record
         this.name = "John Doe";
         this.accountKey = "abcdef";
         this.embeddedDocument1 = new EmbeddedDocument();
         this.embeddedDocument2 = new EmbeddedDocument();
+        this.arrayField = new String[25];
     }
 
     public Account(String name) {
@@ -33,13 +37,15 @@ public class Account {
         this.accountKey = "abcdef";
         this.embeddedDocument1 = new EmbeddedDocument();
         this.embeddedDocument2 = new EmbeddedDocument();
+        this.arrayField = new String[25];
     }
 
-    public Account(String name, String accountKey, EmbeddedDocument embeddedDocument1, EmbeddedDocument embeddedDocument2) {
+    public Account(String name, String accountKey, EmbeddedDocument embeddedDocument1, EmbeddedDocument embeddedDocument2, String[] arrayField) {
         this.name = name;
         this.accountKey = accountKey;
         this.embeddedDocument1 = embeddedDocument1;
         this.embeddedDocument2 = embeddedDocument2;
+        this.arrayField = arrayField;
     }
 
     public ObjectId getId() {
@@ -80,5 +86,13 @@ public class Account {
 
     public void setEmbeddedDocument2(EmbeddedDocument embeddedDocument2) {
         this.embeddedDocument2 = embeddedDocument2;
+    }
+
+    public String[] getArrayField() {
+        return arrayField;
+    }
+
+    public void setArrayField(String[] arrayField) {
+        this.arrayField = arrayField;
     }
 }

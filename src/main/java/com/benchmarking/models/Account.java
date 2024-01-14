@@ -33,6 +33,7 @@ public class Account {
 
     public Account(String name) {
         // Test record
+        this.id = new ObjectId();
         this.name = name;
         this.accountKey = "abcdef";
         this.embeddedDocument1 = new EmbeddedDocument();

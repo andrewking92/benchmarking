@@ -16,10 +16,13 @@ import com.mongodb.ServerApi;
 import com.mongodb.ServerApiVersion;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
+import org.bson.types.Decimal128;
+
 import java.util.concurrent.TimeUnit;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
@@ -30,6 +33,7 @@ public class BulkInsertThreaded {
     private static final String MONGODB_URI = System.getProperty("mongodb.uri");
     private static final String DATABASE_NAME = System.getProperty("mongodb.database");
     private static final String COLLECTION_NAME = System.getProperty("mongodb.collection");
+    private static final String LOREM_IPSUM = System.getenv("LOREM_IPSUM");
     private static final CodecRegistry pojoCodecRegistry = fromProviders(PojoCodecProvider.builder().automatic(true).build());
     private static final CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), pojoCodecRegistry);
 
@@ -46,25 +50,22 @@ public class BulkInsertThreaded {
 
         try (MongoClient mongoClient = MongoClients.create(settings)) {
             // Get the database and collection
-            MongoCollection<Account> collection = mongoClient.getDatabase(DATABASE_NAME)
-                    .getCollection(COLLECTION_NAME, Account.class);
+            MongoCollection<ParentDocument> collection = mongoClient.getDatabase(DATABASE_NAME)
+                    .getCollection(COLLECTION_NAME, ParentDocument.class);
 
-            List<WriteModel<Account>> requests = new ArrayList<>();
+            List<WriteModel<ParentDocument>> requests = new ArrayList<>();
 
 
             for (int i = 1; i <= TOTAL_DOCUMENTS; i++) {
-                Account account = new Account(i, "Insert");
+                ParentDocument parentDocument = new ParentDocument(LOREM_IPSUM, true, 1, 1.0, 10L, 0f, new Decimal128(1), new Date(), LOREM_IPSUM, LOREM_IPSUM);
 
-                requests.add(new InsertOneModel<>(account));
+                requests.add(new InsertOneModel<>(parentDocument));
             }
 
             BulkWriteOptions bulkWriteOptions = new BulkWriteOptions().ordered(false);
 
             // Create a thread pool with the specified number of threads
             ExecutorService executorService = Executors.newFixedThreadPool(NUM_THREADS);
-
-            // Start timing
-            // long startTime = System.currentTimeMillis();
 
             // Calculate the chunk size per thread
             int chunkSize = requests.size() / NUM_THREADS;
@@ -77,7 +78,7 @@ public class BulkInsertThreaded {
                     endIndex = requests.size();
                 }
 
-                List<WriteModel<Account>> chunk = requests.subList(startIndex, endIndex);
+                List<WriteModel<ParentDocument>> chunk = requests.subList(startIndex, endIndex);
 
                 // Submit the task to the executor service
                 executorService.submit(new BulkInsertTask(collection, chunk, bulkWriteOptions));
@@ -97,11 +98,6 @@ public class BulkInsertThreaded {
                 System.out.println("Interrupted while waiting for task completion: " + e.getMessage());
                 Thread.currentThread().interrupt();
             }
-
-            // long endTime = System.currentTimeMillis();
-            // long duration = endTime - startTime;
-
-            // System.out.println("Execution time: " + duration + " milliseconds.");
         }
     }
 }

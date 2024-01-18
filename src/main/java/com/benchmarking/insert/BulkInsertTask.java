@@ -8,11 +8,11 @@ import com.mongodb.client.model.WriteModel;
 import java.util.List;
 
 public class BulkInsertTask implements Runnable {
-    private final MongoCollection<Account> collection;
-    private final List<WriteModel<Account>> requests;
+    private final MongoCollection<ParentDocument> collection;
+    private final List<WriteModel<ParentDocument>> requests;
     private final BulkWriteOptions bulkWriteOptions;
 
-    public BulkInsertTask(MongoCollection<Account> collection, List<WriteModel<Account>> requests,
+    public BulkInsertTask(MongoCollection<ParentDocument> collection, List<WriteModel<ParentDocument>> requests,
                               BulkWriteOptions bulkWriteOptions) {
         this.collection = collection;
         this.requests = requests;
